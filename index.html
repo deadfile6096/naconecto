@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PvZ Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="units.css">
+    <link rel="icon" type="image/png" href="favicon/favicon-32x32.png">
+</head>
+<body>
+    <!-- Лого в верхней части сайта -->
+    <div id="top-logo">
+        <img src="assets/logo.PNG" alt="Logo" class="logo-image">
+    </div>
+    
+    <!-- HUD -->
+    <div id="hud">
+        <div id="timer"></div>
+    </div>
+
+    <!-- Game Elements -->
+    <div id="zombies-container"></div>
+    <div id="bullets-container"></div>
+    <div id="currency-drops"></div>
+    
+    <!-- Панель в левом нижнем углу -->
+    <div id="bottom-left-panel">
+        <img src="assets/panel.PNG" alt="Panel" class="panel-image">
+        <img src="assets/locked_unit.PNG" alt="Locked Unit" class="locked-unit-image">
+        <img src="assets/locked_unit2.PNG" alt="Locked Unit 2" class="locked-unit2-image">
+        <img src="assets/section_unit.PNG" alt="Section Unit" class="section-unit-image">
+        <img src="assets/section_unit2.PNG" alt="Section Unit 2" class="section-unit2-image">
+        <img src="assets/section_unit3.PNG" alt="Section Unit 3" class="section-unit3-image">
+        <img src="assets/section_unit4.PNG" alt="Section Unit 4" class="section-unit4-image">
+        <img src="assets/counter_coin.PNG" alt="Counter Coin" class="counter-coin-image">
+        <div id="currency" class="currency-under-coin">💰 100</div>
+    </div>
+    
+    <!-- Лого твиттера в правом нижнем углу -->
+    <div id="twitter-link">
+        <img src="assets/twitter.PNG" alt="Twitter" class="twitter-image" id="twitter-button" style="cursor: pointer;">
+    </div>
+
+
+    <!-- Unit Selection Panel - удалено -->
+
+
+    <!-- Controls -->
+    <div id="menu-buttons">
+        <button id="pause-btn" style="cursor: pointer;"><img src="assets/pause.PNG" alt="Pause" id="pause-image"></button>
+        <button id="play-btn" style="cursor: pointer;"><img src="assets/play.PNG" alt="Play" id="play-image"></button>
+    </div>
+
+
+    <!-- Game Over Popup -->
+    <div id="lose-popup" class="hidden">GAME OVER</div>
+
+    <!-- Audio Elements -->
+    <audio id="background-music" loop>
+        <source src="assets/audio/background.mp3" type="audio/mp3">
+    </audio>
+    <audio id="start-game-audio" preload="auto">
+        <source src="assets/audio/start_game.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="zombie-audio" preload="auto">
+        <source src="assets/audio/audio_zombie.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="zombie-eat-audio" preload="auto">
+        <source src="assets/audio/audio_zombie_eat_plants.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="app.js" defer></script>
+    
+    <!-- Скрипт для кнопки Twitter -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var twitterButton = document.getElementById('twitter-button');
+            if (twitterButton) {
+                twitterButton.addEventListener('click', function() {
+                    window.open('https://x.com/pumpvszombie?s=21', '_blank');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

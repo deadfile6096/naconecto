@@ -1,0 +1,72 @@
+/* Стили для выбранного юнита */
+.section-unit-image, .section-unit2-image, .section-unit3-image, .section-unit4-image {
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.section-unit-image:hover, .section-unit2-image:hover, .section-unit3-image:hover, .section-unit4-image:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.section-unit-image:active, .section-unit2-image:active, .section-unit3-image:active, .section-unit4-image:active {
+    transform: scale(0.95);
+}
+
+.section-unit-image.selected, .section-unit2-image.selected, .section-unit3-image.selected, .section-unit4-image.selected {
+    transform: scale(1.1);
+    filter: brightness(1.2) drop-shadow(0 0 10px rgba(255, 255, 100, 0.8));
+    border: 2px solid yellow;
+    border-radius: 5px;
+}
+
+/* Стили для токенов (юнитов) */
+.token {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    z-index: 40;
+    transition: transform 0.3s ease;
+}
+
+.token img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.token-health {
+    position: absolute;
+    bottom: -5px;
+    left: 10px;
+    right: 10px;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.token-health .health-bar {
+    height: 100%;
+    background: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.token.placing {
+    animation: token-appear 0.5s ease-out;
+}
+
+@keyframes token-appear {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.token-action {
+    animation: token-pulse 0.3s ease-in-out;
+}
+
+@keyframes token-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}

@@ -1,0 +1,1614 @@
+/* Base styles for game mechanics */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-image: url('assets/background-bg.PNG');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Удален game-container, теперь body является игровым полем */
+
+/* Game area - удалено */
+
+/* Grid - удалено */
+
+/* Units and zombies */
+.token, .zombie {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* UI Elements */
+#hud {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+/* Unit panel - удалено */
+
+/* Utility classes */
+.hidden {
+    display: none !important;
+}
+
+/* Bullets */
+.bullet {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+    z-index: 50;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.3); /* Полупрозрачный черный оверлей */
+    z-index: -1;
+}
+
+/* Базовые стили для игрового контейнера */
+#game-container {
+    position: relative;
+    width: 80vw; /* Увеличиваем ширину для широкоформатных экранов */
+    max-width: 2000px; /* Увеличиваем максимальную ширину для 4K */
+    min-width: 1000px; /* Увеличиваем минимальную ширину */
+    height: 50vw; /* Меняем соотношение сторон для широкоформатных экранов */
+    max-height: 1100px; /* Увеличиваем максимальную высоту */
+    min-height: 600px; /* Увеличиваем минимальную высоту */
+    margin: 4vh auto; /* Увеличиваем отступы */
+    background: #7CBA3D;
+    background-image: 
+        url('assets/background-bg.PNG'),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%2365A32E' fill-opacity='0.3' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: cover, 4px 4px;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    image-rendering: pixelated;
+    
+    /* Ретро-пиксельная рамка */
+    border: 0;
+    outline: 8px solid #8B4513; /* Фиксированная толщина рамки */
+    outline-offset: -8px;
+    position: relative;
+    border-image-source: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='4' height='4' fill='%238B4513'/%3E%3Crect x='4' width='4' height='4' fill='%23A0522D'/%3E%3Crect x='8' width='4' height='4' fill='%238B4513'/%3E%3Crect y='4' width='4' height='4' fill='%23A0522D'/%3E%3Crect x='4' y='4' width='4' height='4' fill='%23FFD700'/%3E%3Crect x='8' y='4' width='4' height='4' fill='%23A0522D'/%3E%3Crect y='8' width='4' height='4' fill='%238B4513'/%3E%3Crect x='4' y='8' width='4' height='4' fill='%23A0522D'/%3E%3Crect x='8' y='8' width='4' height='4' fill='%238B4513'/%3E%3C/svg%3E");
+    border-image-slice: 4;
+    border-image-width: 8px;
+    border-image-repeat: repeat;
+    
+    /* Добавляем свечение по краям */
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
+    /* Удаляем трансформацию при наведении */
+    transform: perspective(1000px) rotateX(0deg);
+}
+
+/* Добавляем пиксельные углы и декоративные элементы */
+#game-container::before,
+#game-container::after,
+#game-container .corner-tl,
+#game-container .corner-tr,
+#game-container .corner-bl,
+#game-container .corner-br {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-color: #FFD700;
+    z-index: 100;
+    image-rendering: pixelated;
+    pointer-events: none; /* Предотвращаем взаимодействие с декоративными элементами */
+}
+
+#game-container::before {
+    top: -8px;
+    left: -8px;
+    box-shadow: 8px 0 0 #8B4513, 0 8px 0 #8B4513, 16px 0 0 #8B4513, 0 16px 0 #8B4513, 24px 0 0 #8B4513, 0 24px 0 #8B4513;
+}
+
+#game-container::after {
+    top: -8px;
+    right: -8px;
+    box-shadow: -8px 0 0 #8B4513, 0 8px 0 #8B4513, -16px 0 0 #8B4513, 0 16px 0 #8B4513, -24px 0 0 #8B4513, 0 24px 0 #8B4513;
+}
+
+/* Добавляем супер-пиксельные декоративные элементы по бокам */
+#game-container .pixel-border-left,
+#game-container .pixel-border-right {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 100%;
+    top: 0;
+    background-image: 
+        /* Мелкие пиксели */
+        repeating-linear-gradient(to bottom, 
+            transparent 0px, transparent 1px,
+            #FFD700 1px, #FFD700 2px,
+            transparent 2px, transparent 3px,
+            #8B4513 3px, #8B4513 4px,
+            #A0522D 4px, #A0522D 5px,
+            #8B4513 5px, #8B4513 6px,
+            transparent 6px, transparent 7px,
+            #FFD700 7px, #FFD700 8px),
+        /* Основной узор */
+        repeating-linear-gradient(to bottom, 
+            #8B4513 0px, #8B4513 16px, 
+            #FFD700 16px, #FFD700 20px, 
+            #A0522D 20px, #A0522D 24px,
+            #8B4513 24px, #8B4513 40px);
+    background-size: 4px 8px, 100% 40px;
+    z-index: 99;
+    image-rendering: pixelated;
+    box-shadow: inset 0 0 2px #FFD700;
+    pointer-events: none; /* Предотвращаем взаимодействие с декоративными элементами */
+}
+
+#game-container .pixel-border-left {
+    left: -16px;
+}
+
+#game-container .pixel-border-right {
+    right: -16px;
+}
+
+#game-container .pixel-border-top,
+#game-container .pixel-border-bottom {
+    content: '';
+    position: absolute;
+    height: 16px;
+    width: 100%;
+    left: 0;
+    background-image: 
+        /* Мелкие пиксели */
+        repeating-linear-gradient(to right, 
+            transparent 0px, transparent 1px,
+            #FFD700 1px, #FFD700 2px,
+            transparent 2px, transparent 3px,
+            #8B4513 3px, #8B4513 4px,
+            #A0522D 4px, #A0522D 5px,
+            #8B4513 5px, #8B4513 6px,
+            transparent 6px, transparent 7px,
+            #FFD700 7px, #FFD700 8px),
+        /* Основной узор */
+        repeating-linear-gradient(to right, 
+            #8B4513 0px, #8B4513 16px, 
+            #FFD700 16px, #FFD700 20px, 
+            #A0522D 20px, #A0522D 24px,
+            #8B4513 24px, #8B4513 40px);
+    background-size: 4px 8px, 40px 100%;
+    z-index: 99;
+    image-rendering: pixelated;
+    box-shadow: inset 0 0 2px #FFD700;
+}
+
+#game-container .pixel-border-top {
+    top: -16px;
+}
+
+#game-container .pixel-border-bottom {
+    bottom: -16px;
+}
+
+/* Добавляем мелкие пиксельные детали по всему периметру */
+#game-container::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background-image: 
+        /* Горизонтальные линии */
+        linear-gradient(to right, transparent 4px, #FFD700 4px, #FFD700 5px, transparent 5px),
+        linear-gradient(to right, transparent 8px, #8B4513 8px, #8B4513 9px, transparent 9px),
+        /* Вертикальные линии */
+        linear-gradient(to bottom, transparent 4px, #FFD700 4px, #FFD700 5px, transparent 5px),
+        linear-gradient(to bottom, transparent 8px, #8B4513 8px, #8B4513 9px, transparent 9px);
+    background-size: 12px 1px, 16px 1px, 1px 12px, 1px 16px;
+    background-position: 0 0, 0 0, 0 0, 0 0;
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+    pointer-events: none;
+    z-index: 98;
+    image-rendering: pixelated;
+}
+
+/* Main Game Area */
+#game-area {
+    position: relative;
+    width: 100%;
+    height: 700px;
+}
+
+/* Logo */
+#logo {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+}
+
+.logo-image {
+    height: 60px;
+    width: auto;
+    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.5));
+    transition: transform 0.3s ease, filter 0.3s ease;
+    image-rendering: pixelated;
+}
+
+.logo-image:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.7)) brightness(1.1);
+}
+
+/* HUD */
+#hud {
+    position: absolute;
+    top: clamp(10px, 2vh, 25px);
+    right: clamp(10px, 2vw, 25px);
+    font-size: clamp(16px, 2vw, 28px);
+    display: flex;
+    gap: clamp(20px, 3vw, 40px);
+    z-index: 10;
+}
+
+#currency-display {
+    position: absolute;
+    top: clamp(10px, 2vh, 25px);
+    left: clamp(10px, 2vw, 25px);
+    background: linear-gradient(to bottom, #FFD700, #FFC125); /* Золотой градиент */
+    border: clamp(2px, 0.3vw, 3px) solid #8B4513; /* Адаптивная граница */
+    border-radius: clamp(6px, 0.8vw, 12px);
+    padding: clamp(6px, 1vh, 12px) clamp(10px, 1.5vw, 25px);
+    font-size: clamp(16px, 2vw, 28px); /* Адаптивный размер шрифта */
+    font-weight: bold;
+    color: #8B4513; /* Коричневый текст */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+    z-index: 10;
+}
+
+#timer-display {
+    position: absolute;
+    top: clamp(10px, 2vh, 25px);
+    right: clamp(10px, 2vw, 25px);
+    background: linear-gradient(to bottom, #FFD700, #FFC125); /* Золотой градиент */
+    border: clamp(2px, 0.3vw, 3px) solid #8B4513; /* Адаптивная граница */
+    border-radius: clamp(6px, 0.8vw, 12px);
+    padding: clamp(6px, 1vh, 12px) clamp(10px, 1.5vw, 25px);
+    font-size: clamp(16px, 2vw, 28px); /* Адаптивный размер шрифта */
+    font-weight: bold;
+    color: #8B4513; /* Коричневый текст */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+    z-index: 10;
+}
+
+#timer-display:hover, #currency-display:hover {
+    transform: perspective(300px) rotateX(0deg) scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), inset 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+/* Launchpad Area */
+#launchpad-area {
+    position: absolute;
+    top: 140px;
+    left: 10px;
+    width: 120px;
+    height: 600px;
+    background: #A67C52; /* Коричневый цвет земли как в PvZ */
+    border-right: 3px dashed #8B4513;
+    z-index: 2;
+}
+
+#launchpad-label {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    width: 100%;
+    font-size: 12px;
+    color: #8B4513; /* Коричневый текст */
+    text-align: center;
+    transform: rotate(-90deg);
+    transform-origin: 50px 50px;
+    text-shadow: 1px 1px 0 #FFF;
+}
+
+#launchpad-image {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 80px;
+    height: 80px;
+    background: url('assets/launchpad.png') center/contain no-repeat;
+}
+
+/* Стили для изображений Pumpfun в лаунчпад арене */
+.pumpfun-row {
+    position: absolute;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    background: url('assets/pumpfun.png') center/contain no-repeat;
+    z-index: 3;
+    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.6));
+    animation: pumpfun-pulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes pumpfun-pulse {
+    0% { transform: scale(1); filter: brightness(1); }
+    100% { transform: scale(1.1); filter: brightness(1.2); }
+}
+
+/* Game Grid */
+#grid {
+    position: absolute;
+    top: calc(15% + 20px); /* Адаптивное позиционирование */
+    left: calc(10% + 20px);
+    width: calc(90% - 40px); /* Адаптивная ширина */
+    height: calc(75% - 40px); /* Адаптивная высота */
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    background: rgba(0, 0, 0, 0.05); /* Очень легкое затемнение */
+    z-index: 1;
+}
+
+.cell {
+    border: 1px dashed rgba(139, 69, 19, 0.2); /* Светло-коричневая пунктирная граница */
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.cell:hover {
+    background: rgba(255, 255, 255, 0.2); /* Светлое свечение при наведении */
+    cursor: pointer;
+}
+
+/* Zombies Container */
+#zombies-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Стили для зомби */
+.zombie {
+    position: absolute;
+    width: 130px; /* Увеличенная ширина */
+    height: 150px; /* Увеличенная высота */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center; /* Центрируем изображение */
+    z-index: 5; /* Увеличенный z-index, чтобы быть над токенами */
+    transform-origin: center center; /* Центрируем трансформации */
+    animation: zombie-walk 1s infinite alternate;
+    filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.6)); /* Усиленная тень для лучшей видимости */
+    pointer-events: none; /* Отключаем реакцию на клики */
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Индикатор здоровья зомби */
+.zombie-health {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.zombie-health .health-bar {
+    background: #FF5252; /* Красный для зомби */
+}
+
+/* Анимации для зомби */
+.zombie-appearing {
+    animation: zombie-appear 0.5s ease-out;
+}
+
+@keyframes zombie-appear {
+    0% { transform: translateX(50px) scale(0.5); opacity: 0; }
+    100% { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+@keyframes zombie-walk {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(3px) rotate(2deg); }
+}
+
+/* Специфические стили для разных типов зомби */
+.zombie[data-type="Zombie 1"] {
+    animation-duration: 1.2s; /* Медленнее анимация */
+}
+
+.zombie[data-type="Zombie 2"] {
+    animation-duration: 0.8s; /* Быстрее анимация */
+}
+
+.zombie[data-type="Zombie 3"] {
+    animation-duration: 1s; /* Средняя скорость анимации */
+    transform: scale(1.2); /* Немного крупнее */
+}
+
+/* Стили для атакующих зомби */
+.zombie.attacking {
+    animation: zombie-attack 0.8s infinite alternate !important;
+    filter: brightness(1.2) contrast(1.1) drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.7)) !important;
+}
+
+@keyframes zombie-attack {
+    0% { transform: translateX(-8px) rotate(-3deg) scale(1.05); }
+    50% { transform: translateX(-4px) rotate(0deg) scale(1.1); }
+    100% { transform: translateX(0) rotate(3deg) scale(1.05); }
+}
+
+/* Стили для токенов, получающих урон */
+.token.taking-damage {
+    animation: token-damage 0.2s ease-in-out;
+    filter: brightness(1.5) contrast(1.2);
+}
+
+@keyframes token-damage {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+}
+
+/* Стили для уничтожения токенов */
+.token.destroyed {
+    animation: token-destroyed 0.5s ease-in forwards;
+    pointer-events: none;
+}
+
+@keyframes token-destroyed {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2) rotate(5deg); }
+    100% { opacity: 0; transform: scale(0.5) rotate(15deg); }
+}
+
+/* Unit Selection Panel */
+#unit-panel-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: clamp(90px, 14%, 130px); /* Адаптивная высота панели */
+    background: linear-gradient(to bottom, #8B4513, #A67C52); /* Градиентный коричневый фон */
+    border-top: clamp(2px, 0.5vw, 4px) solid #8B4513; /* Адаптивная толщина границы */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+#unit-panel-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23FFD700' fill-opacity='0.1' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+    background-size: 4px 4px;
+    pointer-events: none;
+}
+
+#unit-panel {
+    display: flex;
+    gap: clamp(8px, 1.5vw, 20px); /* Адаптивный отступ между карточками */
+    padding: clamp(5px, 1vw, 15px);
+    position: relative;
+    z-index: 2;
+    flex-wrap: wrap; /* Позволяет карточкам переноситься на новую строку на очень узких экранах */
+    justify-content: center;
+}
+
+.unit-card {
+    width: clamp(60px, 6vw, 90px); /* Адаптивная ширина */
+    height: clamp(75px, 12vh, 110px); /* Адаптивная высота */
+    background: linear-gradient(to bottom, #F8D568, #E6C88A); /* Золотистый градиент */
+    border: clamp(2px, 0.3vw, 3px) solid #8B4513; /* Адаптивная граница */
+    border-radius: clamp(5px, 0.6vw, 8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: clamp(5px, 0.8vw, 8px);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), inset 0 0 5px rgba(255, 255, 255, 0.5);
+    transform: perspective(300px) rotateX(5deg);
+}
+
+.unit-card:hover {
+    transform: perspective(300px) rotateX(0deg) translateY(-5px);
+    border-color: #FFD700; /* Золотая граница при наведении */
+    background: linear-gradient(to bottom, #FFD700, #F8D568); /* Ярче при наведении */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), inset 0 0 8px rgba(255, 255, 255, 0.7), 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.unit-card.selected {
+    border-color: #FFD700; /* Золотая граница при выборе */
+    box-shadow: 0 0 20px #FFD700, inset 0 0 10px rgba(255, 255, 255, 0.8); /* Усиленное золотое свечение */
+    background: linear-gradient(to bottom, #FFD700, #FFC125); /* Яркий золотой градиент */
+    transform: perspective(300px) rotateX(0deg) scale(1.05);
+    z-index: 3;
+    position: relative;
+}
+
+.unit-card.locked {
+    filter: grayscale(50%);
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: #A89078; /* Более темный фон для заблокированных карточек */
+}
+
+/* Стили для перезарядки */
+.unit-card.cooldown {
+    position: relative;
+    pointer-events: none;
+}
+
+.cooldown-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    z-index: 3;
+    transform-origin: center bottom;
+}
+
+@keyframes cooldown-progress {
+    0% { clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%); }
+    100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
+}
+
+/* Стили для индикации недостаточного количества валюты */
+#currency.not-enough {
+    animation: shake-currency 0.5s ease-in-out;
+    color: #FF5252;
+}
+
+@keyframes shake-currency {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+/* Стили для индикатора изменения валюты */
+.currency-change {
+    position: absolute;
+    top: -20px;
+    right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    animation: float-up 1s ease-out forwards;
+}
+
+@keyframes float-up {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
+}
+
+/* Стили для индикации занятой ячейки */
+.cell.occupied-flash {
+    animation: occupied-flash 0.5s ease-in-out;
+}
+
+@keyframes occupied-flash {
+    0%, 100% { background-color: rgba(255, 0, 0, 0); }
+    50% { background-color: rgba(255, 0, 0, 0.3); }
+}
+
+.unit-icon {
+    width: 40px;
+    height: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-top: 5px;
+}
+
+.unit-name {
+    font-size: 8px;
+    text-align: center;
+    margin-top: 2px;
+    color: #5D2906; /* Темно-коричневый текст */
+}
+
+.unit-cost {
+    font-size: 10px;
+    color: #8B4513; /* Коричневый текст */
+    background: #F8D568; /* Желтый фон как солнышко */
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    border: 1px solid #8B4513;
+}
+
+.lock-icon {
+    font-size: 20px;
+    color: #5D2906; /* Темно-коричневый замок */
+}
+
+#shovel-tool {
+    width: 50px;
+    height: 50px;
+    background: #C19A6B; /* Светло-коричневый фон */
+    border: 3px solid #8B4513; /* Коричневая граница */
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-left: 15px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#shovel-tool:hover {
+    transform: translateY(-3px);
+    border-color: #5D2906; /* Темнее при наведении */
+    background: #D2B48C; /* Светлее при наведении */
+}
+
+#shovel-tool.selected {
+    border-color: #FFD700; /* Золотая граница при выборе */
+    box-shadow: 0 0 10px #FFD700; /* Золотое свечение */
+    background: #E6C88A; /* Светлый фон при выборе */
+}
+
+/* Menu Buttons */
+#menu-buttons {
+    position: absolute;
+    bottom: clamp(90px, 14%, 130px); /* Адаптивное позиционирование */
+    right: clamp(10px, 2vw, 25px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.5vh, 20px);
+    z-index: 10;
+}
+
+.menu-btn {
+    width: clamp(90px, 8vw, 130px); /* Адаптивная ширина */
+    height: clamp(35px, 5vh, 50px); /* Адаптивная высота */
+    background: linear-gradient(to bottom, #FFD700, #F8D568); /* Золотой градиент */
+    border: clamp(2px, 0.3vw, 3px) solid #8B4513; /* Адаптивная рамка */
+    border-radius: clamp(5px, 0.6vw, 10px);
+    color: #8B4513; /* Коричневый текст */
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(10px, 1vw, 14px); /* Адаптивный размер шрифта */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5), inset 0 0 5px rgba(255, 255, 255, 0.5);
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+    letter-spacing: clamp(0px, 0.5vw, 1px);
+    transform: perspective(300px) rotateX(5deg);
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+}
+
+.menu-btn:hover {
+    background: linear-gradient(to bottom, #FFD700, #FFC125); /* Ярче при наведении */
+    transform: perspective(300px) rotateX(0deg) scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), inset 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+.menu-btn:hover::before {
+    transform: translateX(100%);
+}
+
+#pause-btn, #play-btn {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+#pause-btn img, #play-btn img {
+    transition: all 0.3s ease;
+}
+
+#pause-btn:hover img, #play-btn:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+#pause-btn:active img, #play-btn:active img {
+    transform: scale(0.95);
+    filter: brightness(0.9);
+}
+
+#pause-btn.active {
+    /* Убираем все стили, чтобы кнопка выглядела так же, как и до нажатия */
+    background: none;
+    color: inherit;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+/* Удалено дублирующееся правило */
+
+/* Стили для зомби */
+.zombie {
+    position: absolute;
+    z-index: 50;
+    transform-origin: bottom center;
+    animation: zombieSwaying 3s ease-in-out infinite alternate;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.5));
+    transition: right 0.5s linear;
+}
+
+.zombie img {
+    max-height: 120px;
+    transform-origin: bottom center;
+}
+
+/* Анимация покачивания зомби */
+@keyframes zombieSwaying {
+    0% {
+        transform: rotate(-3deg);
+    }
+    100% {
+        transform: rotate(3deg);
+    }
+}
+
+/* Анимация появления зомби */
+.zombie-appearing {
+    animation: zombieAppearing 0.5s ease-in-out;
+}
+
+@keyframes zombieAppearing {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Стили для изображения locked-unit */
+.locked-unit-image {
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    bottom: 250px;
+    left: 660px;
+    z-index: 100;
+}
+
+/* Стили для изображения locked-unit2 */
+.locked-unit2-image {
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    bottom: 250px;
+    left: 560px;
+    z-index: 100;
+}
+
+/* Стили для изображения section-unit */
+.section-unit-image {
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    bottom: 250px;
+    left: 460px;
+    z-index: 100;
+}
+
+/* Стили для изображения section-unit2 */
+.section-unit2-image {
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    bottom: 250px;
+    left: 360px;
+    z-index: 100;
+}
+
+/* Стили для изображения section-unit3 */
+.section-unit3-image {
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    bottom: 250px;
+    left: 260px;
+    z-index: 100;
+}
+
+/* Стили для изображения section-unit4 */
+.section-unit4-image {
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    bottom: 250px;
+    left: 160px;
+    z-index: 100;
+}
+
+/* Стили для изображения counter-coin */
+.counter-coin-image {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    bottom: 280px;
+    left: 60px;
+    z-index: 100;
+}
+
+/* Стили для счетчика валюты под counter-coin */
+.currency-under-coin {
+    position: absolute;
+    bottom: 250px;
+    left: 70px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.7);
+    z-index: 101;
+}
+
+/* Стили для пуль - максимально простые */
+.bullet {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    z-index: 80;
+}
+
+/* Стили для падающих монет */
+#currency-drops {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Чтобы контейнер не блокировал клики */
+    z-index: 50;
+}
+
+.currency-drop {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-image: url('assets/coin.PNG');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    pointer-events: auto; /* Включаем события для монет */
+    z-index: 51;
+    animation: coin-spin 1s infinite linear;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.currency-drop:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+.currency-drop.collecting {
+    animation: collect-coin 0.3s forwards;
+}
+
+.currency-drop.disappearing {
+    animation: disappear-coin 0.5s forwards;
+}
+
+@keyframes coin-spin {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+}
+
+@keyframes collect-coin {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+@keyframes disappear-coin {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Стили для лого твиттера */
+#twitter-link {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    z-index: 9999; /* Увеличиваем z-index, чтобы гарантировать, что он находится поверх всего */
+}
+
+.twitter-link {
+    display: block;
+    cursor: pointer;
+}
+
+.twitter-image {
+    width: 120px;
+    height: 120px;
+    transition: all 0.3s ease;
+}
+
+.twitter-image:hover {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+.twitter-image:active {
+    transform: scale(0.95);
+    filter: brightness(0.9);
+}
+
+/* Стили для лого в верхней части сайта */
+#top-logo {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+}
+
+#top-logo .logo-image {
+    width: 200px;
+    height: auto;
+}
+
+/* Стили для сообщения о паузе */
+#pause-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 36px;
+    padding: 20px 40px;
+    border-radius: 10px;
+    z-index: 1000;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    animation: pulse 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    100% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Lose Popup */
+#lose-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    color: #FFFFFF; /* Белый текст */
+    background: rgba(139, 0, 0, 0.9); /* Темно-красный фон */
+    padding: 40px 60px;
+    border: 5px solid #FF0000; /* Красная граница */
+    text-align: center;
+    animation: shake 0.5s infinite;
+    z-index: 100;
+    box-shadow: 0 0 30px #FF0000; /* Красное свечение */
+    text-shadow: 2px 2px 4px #000000;
+    font-weight: bold;
+}
+
+/* Currency Drops */
+#currency-drops {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.currency-drop {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    pointer-events: all;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.7));
+    animation: coin-rotate 2s infinite linear;
+    z-index: 15;
+}
+
+@keyframes coin-rotate {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+}
+
+.currency-drop.collecting {
+    animation: collect-coin 0.3s forwards;
+    pointer-events: none;
+}
+
+@keyframes collect-coin {
+    0% { transform: scale(1) rotateY(0deg); opacity: 1; }
+    100% { transform: scale(0.2) rotateY(180deg) translateY(-100px); opacity: 0; }
+}
+
+.currency-drop.disappearing {
+    animation: disappear-coin 0.5s forwards;
+    pointer-events: none;
+}
+
+@keyframes disappear-coin {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Token and Zombie Sprites */
+.token {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform-origin: bottom center;
+    animation: token-breathing 3s infinite ease-in-out;
+}
+
+/* Анимация дыхания для юнитов */
+@keyframes token-breathing {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Специфические стили дыхания для разных типов юнитов */
+/* ASSDAQ - быстрое дыхание */
+.token[data-name="ASSDAQ"] {
+    animation: token-breathing-fast 2s infinite ease-in-out;
+}
+
+@keyframes token-breathing-fast {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.07) rotate(1deg); }
+    100% { transform: scale(1); }
+}
+
+/* Chill House - медленное дыхание */
+.token[data-name="Chill House"] {
+    animation: token-breathing-slow 4s infinite ease-in-out;
+}
+
+@keyframes token-breathing-slow {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+/* Donald Glonk - мощное дыхание */
+.token[data-name="Donald Glonk"] {
+    animation: token-breathing-strong 3.5s infinite ease-in-out;
+}
+
+@keyframes token-breathing-strong {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08) rotate(-1deg); }
+    100% { transform: scale(1); }
+}
+
+/* Pig - быстрое и небольшое дыхание */
+.token[data-name="Pig"] {
+    animation: token-breathing-tiny 1.5s infinite ease-in-out;
+}
+
+@keyframes token-breathing-tiny {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.04) rotate(1deg); }
+    100% { transform: scale(1); }
+}
+
+.token-image {
+    width: 80%;
+    height: 80%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    z-index: 2;
+}
+
+.token-health {
+    width: 70%;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.health-bar {
+    height: 100%;
+    background: #4CAF50;
+    transition: width 0.3s;
+}
+
+/* Анимации для токенов */
+.token.placing {
+    animation: placing 0.5s ease-out;
+    transform-origin: bottom center;
+}
+
+.token.removing {
+    animation: removing 0.3s ease-in;
+    opacity: 0;
+}
+
+.token.token-action {
+    animation: token-action 0.3s ease-in-out;
+}
+
+@keyframes placing {
+    0% { transform: scale(0.2) translateY(50px); opacity: 0; }
+    70% { transform: scale(1.2) translateY(0); opacity: 1; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes removing {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.5) rotate(15deg); opacity: 0; }
+}
+
+@keyframes token-action {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.hidden {
+    display: none;
+}
+
+/* Animations */
+@keyframes shake {
+    0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+    20% { transform: translate(-50%, -50%) translateX(-5px); }
+    40% { transform: translate(-50%, -50%) translateX(5px); }
+    60% { transform: translate(-50%, -50%) translateX(-5px); }
+    80% { transform: translate(-50%, -50%) translateX(5px); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes zombie-walk {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-10px); }
+}
+
+/* Стили для юнитов и зомби */
+.unit, .zombie {
+    position: absolute;
+    width: clamp(70px, 8vw, 120px); /* Адаптивный размер спрайтов */
+    height: clamp(70px, 8vw, 120px);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 2;
+    transition: transform 0.3s;
+}
+
+/* Стили для пуль */
+#bullets-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.bullet {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-size: contain; /* Optional: keep if bullet.PNG needs it */
+    background-repeat: no-repeat; /* Optional: keep if bullet.PNG needs it */
+    background-position: center; /* Optional: keep if bullet.PNG needs it */
+    z-index: 100; 
+    pointer-events: none; /* Чтобы не мешали кликам */
+}
+
+.bullet-damage {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff4500;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    z-index: 51;
+}
+
+@keyframes bullet-rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Стили для Twitter логотипа */
+.side-images-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.right-image {
+    position: fixed;
+    right: clamp(10px, 2vw, 30px);
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    /* Показываем только на больших экранах */
+    display: none;
+}
+
+/* Показываем изображения только на больших экранах */
+@media screen and (min-width: 1600px) {
+    .right-image {
+        display: block;
+    }
+}
+
+/* Медиа-запросы для разных размеров экранов */
+
+/* Для 4K и очень больших экранов */
+@media screen and (min-width: 2560px) {
+    body {
+        padding: 40px; /* Больше отступы для 4K экранов */
+    }
+    
+    #game-container {
+        width: 85vw;
+        max-width: 2200px;
+        height: 47.8125vw;
+        max-height: 1237px;
+        transform: none; /* Убираем масштабирование, используем родные размеры */
+        margin: 0 auto; /* Центрируем контейнер */
+        transform-origin: center top; /* Точка отсчета трансформации */
+        margin-top: 5vh; /* Дополнительный отступ сверху */
+        margin-bottom: 10vh; /* Дополнительный отступ снизу */
+    }
+    
+    /* Сохраняем размеры внутренних элементов как на Full HD */
+    #grid {
+        width: 1080px;
+        height: 600px;
+    }
+    
+    .unit-card {
+        width: 80px;
+        height: 100px;
+    }
+    
+    .menu-btn {
+        width: 120px;
+        height: 45px;
+        font-size: 14px;
+    }
+    
+    #currency, #timer {
+        font-size: 24px;
+    }
+    
+    /* Убираем адаптивные размеры для 4K */
+    .unit, .zombie, .bullet {
+        width: 100px !important;
+        height: 100px !important;
+    }
+}
+
+/* Для широкоформатных мониторов (21:9) */
+@media screen and (min-width: 2560px) and (min-aspect-ratio: 21/9) {
+    #game-container {
+        width: 2100px; /* Шире для широкоформатных мониторов */
+        max-width: 2100px;
+        transform: scale(1.4); /* Немного меньше масштаб */
+    }
+    
+    /* Центрируем игровое поле на широком экране */
+    #grid {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* Для планшетов и маленьких ноутбуков */
+@media screen and (max-width: 1024px) {
+    #game-container {
+        min-width: 700px;
+        min-height: 400px;
+    }
+    
+    .unit-card {
+        width: 60px;
+        height: 75px;
+    }
+    
+    .menu-btn {
+        width: 90px;
+        height: 35px;
+        font-size: 10px;
+    }
+    
+    #currency-display, #timer-display {
+        font-size: 16px;
+        padding: 6px 10px;
+    }
+}
+
+/* Стили для панели в левом нижнем углу */
+#bottom-left-panel {
+    position: fixed;
+    left: 80px; /* Перемещаем немного правее */
+    bottom: -150px; /* Опускаем на 20 пикселей вниз */
+    z-index: 100;
+}
+
+.panel-image {
+    position: relative; /* Позволит смещать относительно обычной позиции */
+    bottom: 210px;      /* Поднимаем картинку на 170px */
+    width: 1200px; /* Увеличиваем в три раза (300px * 3) */
+    height: auto;
+    opacity: 0.9; /* Немного прозрачности */
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+
+/* Адаптивность для панели */
+@media screen and (max-width: 1440px) {
+    .panel-image {
+        width: 600px; /* 2/3 от полного размера */
+    }
+    
+    #bottom-left-panel {
+        left: 30px;
+    }
+    
+    #menu-buttons {
+        left: 250px;
+        bottom: 20px;
+    }
+    
+    #play-btn img, #pause-btn img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .panel-image {
+        width: 450px; /* Половина от полного размера */
+    }
+    
+    #bottom-left-panel {
+        left: 20px;
+    }
+    
+    #menu-buttons {
+        left: 180px;
+        bottom: 20px;
+    }
+    
+    #play-btn img, #pause-btn img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .panel-image {
+        width: 300px; /* Треть от полного размера */
+    }
+    
+    #bottom-left-panel {
+        left: 10px;
+    }
+    
+    #menu-buttons {
+        left: 120px;
+        bottom: 20px;
+    }
+    
+    #play-btn img, #pause-btn img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Для узких экранов и вертикальной ориентации */
+@media screen and (max-width: 800px) {
+    #game-container {
+        min-width: 100%;
+        width: 100%;
+        height: 100vh;
+        margin: 0;
+        border-radius: 0;
+    }
+    
+    #grid {
+        top: 20%;
+        left: 5%;
+        width: 90%;
+        height: 60%;
+    }
+    
+    #unit-panel-container {
+        height: 20%;
+    }
+    
+    .unit-card {
+        width: 50px;
+        height: 65px;
+    }
+    
+    .menu-btn {
+        width: 80px;
+        height: 30px;
+        font-size: 9px;
+    }
+}
+
+/* Стили для кнопок play и pause */
+#menu-buttons {
+    position: fixed;
+    bottom: 80px; /* Располагаем кнопки на панели */
+    left: 870px; /* Позиция на панели */
+    display: flex;
+    flex-direction: row; /* Располагаем кнопки в ряд */
+    gap: 0px; /* Убираем промежуток между кнопками */
+    z-index: 101; /* Выше чем у панели */
+    pointer-events: all; /* Чтобы кнопки можно было нажимать */
+}
+
+#play-btn, #pause-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    outline: none;
+}
+
+#play-btn:focus, #pause-btn:focus {
+    outline: none;
+}
+
+#play-btn:active, #pause-btn:active {
+    outline: none;
+    transform: none;
+}
+
+#play-btn img, #pause-btn img {
+    width: 150px;
+    height: 150px;
+}
+
+/* Стили для логотипа Twitter */
+.twitter-link {
+    transition: transform 0.3s ease, filter 0.3s ease;
+    display: block;
+}
+
+.twitter-link:hover {
+    transform: scale(1.1) rotate(10deg);
+    filter: brightness(1.2);
+}
+
+.twitter-logo {
+    width: clamp(80px, 8vw, 120px); /* Адаптивный размер */
+    height: clamp(80px, 8vw, 120px);
+    border-radius: 50%;
+    box-shadow: 0 0 clamp(8px, 1vw, 15px) rgba(0, 0, 0, 0.5);
+    border: clamp(3px, 0.4vw, 5px) solid #1DA1F2; /* Адаптивная граница */
+    animation: twitter-pulse 3s infinite alternate ease-in-out;
+    opacity: 0.8;
+}
+
+.twitter-logo:hover {
+    opacity: 1;
+}
+
+@keyframes twitter-pulse {
+    0% { transform: scale(1); box-shadow: 0 0 10px rgba(29, 161, 242, 0.5); }
+    100% { transform: scale(1.05); box-shadow: 0 0 15px rgba(29, 161, 242, 0.8); }
+}
+
+.bullet-hit {
+    animation: bullet-hit 0.3s forwards;
+}
+
+@keyframes bullet-hit {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.7; }
+    100% { transform: scale(0); opacity: 0; }
+}
